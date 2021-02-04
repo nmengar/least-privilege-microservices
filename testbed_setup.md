@@ -2,7 +2,7 @@
 To setup Sockshop application on top of istio and kubernetes in CloudLab, do the following steps-
 
 **Installing Kubernetes on the cluster-**
-1. Deploy a 3-node cluster with CentOS 7 installed
+1. Deploy a 3-node cluster with CentOS 7 installed. Follow (https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) to add the Kubernetes repository for yum
 
 2. Edit the /etc/hosts file to add the hostnames "master-node", "node-1" and "node-2"
 
