@@ -58,7 +58,7 @@ This follows the official documentation to install istio.
 `cd istio-1.8.1` <br />
 `export PATH=$PWD/bin:$PATH` <br />
 
-3. Install the demo configuration profile of Istio (if you want different profiles, explore at https://istio.io/latest/docs/setup/additional-setup/config-profiles/)- <br />
+3. Install the demo configuration profile of Istio (if you want different profiles, explore at https://istio.io/latest/docs/setup/additional-setup/config-profiles/ )- <br />
 `istioctl install --set profile=demo -y` <br />
 
 4. Enable automatic sidecar injnection for the namespace sock-shop and default- <br />
