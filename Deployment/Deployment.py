@@ -2,18 +2,14 @@ from kubernetes import client,config
 from os import path
 import yaml
     
-def create_deployment(self):
+def create_deployment(manifest):
     config.load_kube_config()
-    path = input('Enter path of deployment manifest: ')
-    namespace = input('Enter namespace you want to deploy in: ')
-    with open(path) as f:
-        dep = yaml.safe_load(f)
-        apps_v1 = client.AppsV1.Api()
-        result = v1.create_nampespaced_deployment(
-            body=dep,
-            namespace=namespace
-        )
-        print('Deployment created. status=%s' % (result.metadata.name))
+    apps_v1 = client.AppsV1.Api()
+    result = v1.create_nampespaced_deployment(
+        body=manifest,
+        namespace=manifest['metadata']['namespace']
+    )
+    print('Deployment created. status=%s' % (result.metadata.name))
     
 def delete_deployment(self):
     config.load_kube_config()

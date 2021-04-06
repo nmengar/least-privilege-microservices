@@ -2,8 +2,10 @@ from Deployment.Deployment import create_deployment,delete_deployment
 from Service import create_service,delete_service
 from Namespaces import create_namespace,delete_namespace
 from Pod import list_pods
+from NetworkPolicy.crud import *
 import yaml
 
+namespaces = ['sock-shop']
 
 class Deployment():
     def __init__(self):
@@ -44,14 +46,32 @@ class Namespace():
 
 
 
-def parse_manifest(manifest,namespace):
-    obj = 1
-    return obj
+def parse_manifest(manifest):
+    """
+    This will parse a manifest file
+    """
+    if manifest['apiVersion'] != 'apps/v1':
+        # Check for API Version Compatibility
+        return -1
+    
+    if manifest['metadata']['namespace'] not in namespaces:
+        # No such namespace
+        print('No such namespace exists')
+        return -1
+    
+    if manifest['kind'] == 'Deployment':
+        result = create_deployment(manifest=manifest)
+    elif manifest['kind'] == 'Service':
+        result = create_service(manifest=manifest)
+    elif manifest['kind'] == 'NetworkPolicy':
+        result = create_network_policy(manifest=manifest)
+
+    return result
 
 if __name__ == '__main__':
     """
     Currenly this should constantly run until the operation is complete
-    TODO: Add mechanism to store and restore state from file
+    TODO: Add mechanism to store and restore state from file/database
     """
     switcher = {
         0: create_namespace,
@@ -67,7 +87,7 @@ if __name__ == '__main__':
         try:
             with open(path) as f:
                 if multiple_documents == 'n':
-                    data = yaml.load(f, Loader=yaml.FullLoader)
+                    data = [yaml.load(f, Loader=yaml.FullLoader)]
                 elif multiple_documents == 'y':
                     mdata = yaml.load_all(f, Loader=yaml.FullLoader)
                     data = []
@@ -79,14 +99,19 @@ if __name__ == '__main__':
                 else:
                     print('Invalid choice for multiple manifests')
                     continue
-                print(data)
-                continue
         except:
             print('Error in opening/parsing the file')
         
-        option = input('\nMenu\n1. Create Namespace\n2. Delete Namespace\n3. Create Deployment\n4. Delete Deployment\n5. Create Service\n6. Delete Service\nEnter option: ')
+        for d in data:
+            result = parse_manifest(d)
+            if result == -1:
+                print('Couldn\'t parse the manifest file')
+            else:
+                print('Successfully parsed ',d['kind'],' ',d['metadata']['name'])
+        # option = input('\nMenu\n1. Create Namespace\n2. Delete Namespace\n3. Create Deployment\n4. Delete Deployment\n5. Create Service\n6. Delete Service\nEnter option: ')
+        option = input('Enter e to exit')
         if option == 'e':
             exit()
-        execution = switcher[int(option) - 1]()
-        print(execution)
+        # execution = switcher[int(option) - 1]()
+        # print(execution)
         
