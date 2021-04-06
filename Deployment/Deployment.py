@@ -4,7 +4,7 @@ import yaml
     
 def create_deployment(manifest):
     config.load_kube_config()
-    apps_v1 = client.AppsV1.Api()
+    apps_v1 = client.AppsV1Api()
     result = v1.create_nampespaced_deployment(
         body=manifest,
         namespace=manifest['metadata']['namespace']
