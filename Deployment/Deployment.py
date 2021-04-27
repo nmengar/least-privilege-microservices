@@ -13,7 +13,7 @@ def create_deployment(manifest):
     )
     time.sleep(2)
     pods = list_pods_for_all_namespaces()
-    for i in pods:
+    for i in pods.items:
         if i.metadata.namespace == manifest['metadata']['namespace']:
             if manifest['metadata']['app'] in i.metadata.name:
                 pod_list.append((i.metadata.name,i.status.pod_ip))
