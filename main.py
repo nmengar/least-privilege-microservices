@@ -69,7 +69,7 @@ def parse_manifest(manifest):
         return -1
     
     if manifest['kind'] == 'Deployment':
-        store_state = 
+        # store_state = 
         result = create_deployment(manifest=manifest)
     elif manifest['kind'] == 'Service':
         result = create_service(manifest=manifest)

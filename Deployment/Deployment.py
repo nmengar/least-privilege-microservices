@@ -1,6 +1,8 @@
 from kubernetes import client,config
 from os import path
+import time
 import yaml
+from Pod.list_pods import list_pods_for_all_namespaces
     
 def create_deployment(manifest):
     config.load_kube_config()
@@ -9,8 +11,15 @@ def create_deployment(manifest):
         body=manifest,
         namespace=manifest['metadata']['namespace']
     )
-    print(result.metadata)
+    time.sleep(2)
+    pods = list_pods_for_all_namespaces()
+    for i in pods:
+        if i.metadata.namespace == manifest['metadata']['namespace']:
+            if manifest['metadata']['app'] in i.metadata.name:
+                pod_list.append((i.metadata.name,i.status.pod_ip))
     print('Deployment created. status=%s' % (result.metadata.name))
+    print(pod_list)
+    return pod_list
     
 def delete_deployment(self):
     config.load_kube_config()

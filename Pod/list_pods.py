@@ -1,7 +1,7 @@
 # Reference from https://kubernetes.io/docs/tasks/administer-cluster/access-cluster-api/
 from kubernetes import client, config
 
-def list_pods():
+def list_pods_for_all_namespaces():
     """
     This will list pods for a given namespace
     """
@@ -14,3 +14,4 @@ def list_pods():
         exit(1)
     for i in results.items:
         print("%s\t%s\t%s" % (i.status.pod_ip,i.metadata.namespace,i.metadata.name))
+    return result
